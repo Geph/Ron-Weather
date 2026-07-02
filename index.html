@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Glen Ellyn Weather</title>
   <meta name="description" content="Large-print weather forecast for Glen Ellyn, Illinois.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,7 +20,7 @@
     </div>
 
     <!-- SECTION 1: Current conditions -->
-    <section id="current" class="panel" aria-labelledby="current-heading" hidden>
+    <section id="current" class="panel reveal" aria-labelledby="current-heading" hidden>
       <h1 id="current-heading">Glen Ellyn Weather</h1>
       <p id="current-temp" class="hero-temp">--&deg;</p>
       <p id="current-condition" class="hero-condition">&nbsp;</p>
@@ -25,7 +28,7 @@
     </section>
 
     <!-- SECTION 2: Next 8 hours -->
-    <section id="hourly" class="panel" aria-labelledby="hourly-heading" hidden>
+    <section id="hourly" class="panel reveal" aria-labelledby="hourly-heading" hidden>
       <h2 id="hourly-heading">Next 8 Hours</h2>
       <ul id="hourly-list" class="forecast-list">
         <!-- Filled in by script.js -->
@@ -33,14 +36,14 @@
     </section>
 
     <!-- SECTION 3: Next 10 days -->
-    <section id="daily" class="panel" aria-labelledby="daily-heading" hidden>
+    <section id="daily" class="panel reveal" aria-labelledby="daily-heading" hidden>
       <h2 id="daily-heading">Next 10 Days</h2>
       <ul id="daily-list" class="forecast-list">
         <!-- Filled in by script.js -->
       </ul>
     </section>
 
-    <footer id="updated" hidden>
+    <footer id="updated" class="reveal" hidden>
       <p id="updated-text">&nbsp;</p>
     </footer>
 

@@ -1,9 +1,10 @@
 /* =========================================================
    Glen Ellyn Weather — Low-vision / elderly-friendly styles
    Design targets:
-     - WCAG AAA contrast (white on black = 21:1, yellow on black ≈ 19:1)
+     - WCAG AAA contrast (white ≈ 20:1, yellow ≈ 18:1 on the
+       near-black backgrounds used here)
      - Massive type, single vertical column, generous spacing
-     - Zero animation, zero icons, zero clutter
+     - One gentle fade-in on first load, nothing else moves
    ========================================================= */
 
 /* ---------- Reset & base ---------- */
@@ -20,68 +21,112 @@ html {
 }
 
 body {
-  background-color: #000000;   /* pure black */
-  color: #FFFFFF;              /* pure white — 21:1 contrast */
-  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  /* Near-black midnight blue with a soft glow at the top —
+     reads as black but feels less flat than #000. */
+  background-color: #05070c;
+  background-image: radial-gradient(
+    ellipse 120% 60% at 50% -10%,
+    #101828 0%,
+    #05070c 70%
+  );
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: #FFFFFF;
+  font-family: "Inter", Arial, "Helvetica Neue", Helvetica, sans-serif;
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
-}
-
-/* Respect users who ask the OS for no motion — we have no
-   animations anyway, but this guarantees it. */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-  }
+  min-height: 100vh;
 }
 
 /* ---------- Page column ---------- */
 #app {
   max-width: 68rem;            /* keeps line-tracking short */
   margin: 0 auto;
-  padding: 3rem 2rem 5rem;
+  padding: 3.5rem 2rem 5rem;
+}
+
+/* ---------- One-time load animation ----------
+   Each section fades up gently, staggered top to bottom.
+   Slow and subtle: no bouncing, nothing keeps moving. */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  animation: fade-up 0.9s ease-out both;
+}
+
+#current { animation-delay: 0s;    }
+#hourly  { animation-delay: 0.25s; }
+#daily   { animation-delay: 0.5s;  }
+#updated { animation-delay: 0.75s; }
+
+/* Gentle pulse on the loading message only */
+@keyframes soft-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+#status-message .loading-text {
+  animation: soft-pulse 2s ease-in-out infinite;
+}
+
+/* Users who ask the OS for no motion get none at all. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  .reveal,
+  #status-message .loading-text {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 /* ---------- Loading / error message ---------- */
 #status-message .loading-text,
 #status-message .error-text {
   font-size: 3rem;
-  font-weight: bold;
+  font-weight: 700;
   text-align: center;
   padding: 6rem 1rem;
 }
 
 #status-message .error-text {
-  color: #FFE600;              /* bright yellow, ~18.6:1 on black */
+  color: #FFE600;              /* bright yellow, ~18:1 on background */
 }
 
-/* ---------- Section panels ---------- */
+/* ---------- Section cards ---------- */
 .panel {
-  padding: 4rem 0;
-  border-bottom: 0.35rem solid #FFFFFF;  /* thick divider so sections
-                                            are unmistakably separate */
-}
-
-.panel:last-of-type {
-  border-bottom: none;
+  background: rgba(255, 255, 255, 0.045);
+  border: 0.125rem solid rgba(255, 255, 255, 0.22);
+  border-radius: 1.75rem;
+  padding: 3.5rem 3rem;
+  margin-bottom: 3.5rem;       /* big gap so sections never blur together */
 }
 
 /* ---------- Headings ---------- */
 h1 {
   font-size: 3.25rem;
-  font-weight: bold;
-  color: #FFE600;              /* yellow accent for the page title */
+  font-weight: 900;
+  color: #FFE600;
   text-align: center;
   margin-bottom: 3rem;
+  letter-spacing: -0.01em;
 }
 
 h2 {
-  font-size: 3.25rem;
-  font-weight: bold;
+  font-size: 3rem;
+  font-weight: 900;
   color: #FFE600;
   text-align: center;
-  margin-bottom: 3.5rem;
+  margin-bottom: 3rem;
+  letter-spacing: -0.01em;
 }
 
 /* ---------- Section 1: Current conditions ---------- */
@@ -93,17 +138,20 @@ h2 {
   font-size: 13rem;            /* the single most important number */
   font-weight: 900;
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  /* Soft warm glow — decorative only, text stays pure white */
+  text-shadow: 0 0 5rem rgba(255, 230, 0, 0.25);
 }
 
 .hero-condition {
   font-size: 5rem;
-  font-weight: bold;
+  font-weight: 700;
   margin-top: 2.5rem;
 }
 
 .hero-sunset {
   font-size: 3rem;
+  font-weight: 600;
   color: #FFE600;
   margin-top: 3rem;
 }
@@ -118,19 +166,19 @@ h2 {
   align-items: baseline;
   justify-content: space-between;
   gap: 2rem;
-  padding: 2.75rem 0;          /* huge breathing room between rows */
+  padding: 2.5rem 0.5rem;      /* huge breathing room between rows */
 }
 
-/* Thin-but-visible separator between rows (dimmer than the
-   section dividers so the hierarchy stays clear) */
+/* Visible separator between rows (dimmer than the card borders
+   so the hierarchy stays clear) */
 .forecast-list li + li {
-  border-top: 0.15rem solid #777777;
+  border-top: 0.125rem solid rgba(255, 255, 255, 0.18);
 }
 
 /* Time (e.g. "9 PM") or day (e.g. "Tuesday") */
 .row-label {
   font-size: 3rem;
-  font-weight: bold;
+  font-weight: 700;
   flex: 1 1 auto;
 }
 
@@ -141,20 +189,21 @@ h2 {
   color: #FFE600;
   white-space: nowrap;
   text-align: right;
+  font-variant-numeric: tabular-nums;  /* digits line up down the column */
 }
 
 /* In the daily list the low temp is smaller & white so the
    high temp (yellow) clearly dominates. */
 .row-temp .low {
   font-size: 2.5rem;
-  font-weight: bold;
+  font-weight: 700;
   color: #FFFFFF;
 }
 
-/* Sky condition ("Sunny", "Light rain") */
+/* Sky condition ("Sunny", "Light Rain") */
 .row-condition {
   font-size: 2.75rem;
-  font-weight: normal;
+  font-weight: 400;
   flex: 1 1 auto;
   text-align: right;
 }
@@ -162,6 +211,9 @@ h2 {
 /* On a narrower window, stack each row vertically instead of
    squeezing — never let text shrink. */
 @media (max-width: 56rem) {
+  .panel {
+    padding: 2.5rem 1.75rem;
+  }
   .forecast-list li {
     flex-direction: column;
     align-items: flex-start;
@@ -179,7 +231,7 @@ h2 {
 /* ---------- Footer ---------- */
 #updated-text {
   font-size: 1.75rem;
-  color: #CCCCCC;              /* 13.1:1 on black — still AAA */
+  color: #CCCCCC;              /* ~12:1 on background — still AAA */
   text-align: center;
-  padding-top: 3rem;
+  padding-top: 1rem;
 }
