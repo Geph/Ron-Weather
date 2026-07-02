@@ -21,21 +21,72 @@ html {
 }
 
 body {
-  /* Near-black midnight blue with a soft glow at the top —
-     reads as black but feels less flat than #000. */
-  background-color: #05070c;
-  background-image: radial-gradient(
-    ellipse 120% 60% at 50% -10%,
-    #101828 0%,
-    #05070c 70%
-  );
-  background-attachment: fixed;
-  background-repeat: no-repeat;
   color: #FFFFFF;
   font-family: "Inter", Arial, "Helvetica Neue", Helvetica, sans-serif;
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+  background-color: #05070c;
+}
+
+/* ---------- Dynamic sky background ---------- */
+#sky {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  transition: background 1.5s ease;
+}
+
+/* Dark overlay keeps text AAA-contrast on every sky theme */
+#sky::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 7, 12, 0.62);
+}
+
+body.sky-clear-day #sky {
+  background: linear-gradient(180deg, #1565c0 0%, #42a5f5 45%, #90caf9 100%);
+}
+
+body.sky-clear-night #sky {
+  background: linear-gradient(180deg, #0a1628 0%, #1a237e 55%, #283593 100%);
+}
+
+body.sky-partly-day #sky {
+  background: linear-gradient(180deg, #37474f 0%, #546e7a 40%, #78909c 100%);
+}
+
+body.sky-partly-night #sky {
+  background: linear-gradient(180deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+}
+
+body.sky-cloudy #sky {
+  background: linear-gradient(180deg, #37474f 0%, #607d8b 50%, #78909c 100%);
+}
+
+body.sky-rain #sky {
+  background: linear-gradient(180deg, #1a237e 0%, #37474f 55%, #546e7a 100%);
+}
+
+body.sky-snow #sky {
+  background: linear-gradient(180deg, #455a64 0%, #78909c 50%, #b0bec5 100%);
+}
+
+body.sky-thunder #sky {
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #37474f 100%);
+}
+
+body.sky-fog #sky {
+  background: linear-gradient(180deg, #455a64 0%, #78909c 60%, #b0bec5 100%);
+}
+
+body.sky-default #sky {
+  background: radial-gradient(
+    ellipse 120% 60% at 50% -10%,
+    #101828 0%,
+    #05070c 70%
+  );
 }
 
 /* ---------- Page column ---------- */
@@ -86,6 +137,9 @@ body {
     animation: none !important;
     transition: none !important;
   }
+  #sky {
+    transition: none !important;
+  }
 }
 
 /* ---------- Loading / error message ---------- */
@@ -134,6 +188,18 @@ h2 {
   text-align: center;
 }
 
+.hero-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.hero-icon svg {
+  width: 9rem;
+  height: 9rem;
+  filter: drop-shadow(0 0 2rem rgba(255, 230, 0, 0.35));
+}
+
 .hero-temp {
   font-size: 13rem;            /* the single most important number */
   font-weight: 900;
@@ -163,7 +229,7 @@ h2 {
 
 .forecast-list li {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 2rem;
   padding: 2.5rem 0.5rem;      /* huge breathing room between rows */
@@ -200,12 +266,22 @@ h2 {
   color: #FFFFFF;
 }
 
-/* Sky condition ("Sunny", "Light Rain") */
+/* Sky condition ("Sunny", "Light Rain") with icon */
 .row-condition {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.25rem;
   font-size: 2.75rem;
   font-weight: 400;
   flex: 1 1 auto;
   text-align: right;
+}
+
+.row-icon svg {
+  width: 3.75rem;
+  height: 3.75rem;
+  flex-shrink: 0;
 }
 
 /* On a narrower window, stack each row vertically instead of
@@ -222,9 +298,14 @@ h2 {
   .row-temp,
   .row-condition {
     text-align: left;
+    justify-content: flex-start;
   }
   .hero-temp {
     font-size: 9rem;
+  }
+  .hero-icon svg {
+    width: 7rem;
+    height: 7rem;
   }
 }
 

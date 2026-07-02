@@ -10,7 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="sky-default">
+
+  <!-- Decorative sky layer — theme set by script.js -->
+  <div id="sky" aria-hidden="true"></div>
 
   <main id="app">
 
@@ -22,6 +25,7 @@
     <!-- SECTION 1: Current conditions -->
     <section id="current" class="panel reveal" aria-labelledby="current-heading" hidden>
       <h1 id="current-heading">Glen Ellyn Weather</h1>
+      <div id="hero-icon" class="hero-icon" aria-hidden="true"></div>
       <p id="current-temp" class="hero-temp">--&deg;</p>
       <p id="current-condition" class="hero-condition">&nbsp;</p>
       <p id="sunset-time" class="hero-sunset">&nbsp;</p>
