@@ -1,0 +1,185 @@
+/* =========================================================
+   Glen Ellyn Weather — Low-vision / elderly-friendly styles
+   Design targets:
+     - WCAG AAA contrast (white on black = 21:1, yellow on black ≈ 19:1)
+     - Massive type, single vertical column, generous spacing
+     - Zero animation, zero icons, zero clutter
+   ========================================================= */
+
+/* ---------- Reset & base ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  /* 1rem = 16px baseline; every size below scales if the user
+     bumps browser zoom or OS font size. */
+  font-size: 100%;
+}
+
+body {
+  background-color: #000000;   /* pure black */
+  color: #FFFFFF;              /* pure white — 21:1 contrast */
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Respect users who ask the OS for no motion — we have no
+   animations anyway, but this guarantees it. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---------- Page column ---------- */
+#app {
+  max-width: 68rem;            /* keeps line-tracking short */
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem;
+}
+
+/* ---------- Loading / error message ---------- */
+#status-message .loading-text,
+#status-message .error-text {
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 6rem 1rem;
+}
+
+#status-message .error-text {
+  color: #FFE600;              /* bright yellow, ~18.6:1 on black */
+}
+
+/* ---------- Section panels ---------- */
+.panel {
+  padding: 4rem 0;
+  border-bottom: 0.35rem solid #FFFFFF;  /* thick divider so sections
+                                            are unmistakably separate */
+}
+
+.panel:last-of-type {
+  border-bottom: none;
+}
+
+/* ---------- Headings ---------- */
+h1 {
+  font-size: 3.25rem;
+  font-weight: bold;
+  color: #FFE600;              /* yellow accent for the page title */
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+h2 {
+  font-size: 3.25rem;
+  font-weight: bold;
+  color: #FFE600;
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+/* ---------- Section 1: Current conditions ---------- */
+#current {
+  text-align: center;
+}
+
+.hero-temp {
+  font-size: 13rem;            /* the single most important number */
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.hero-condition {
+  font-size: 5rem;
+  font-weight: bold;
+  margin-top: 2.5rem;
+}
+
+.hero-sunset {
+  font-size: 3rem;
+  color: #FFE600;
+  margin-top: 3rem;
+}
+
+/* ---------- Sections 2 & 3: Forecast lists ---------- */
+.forecast-list {
+  list-style: none;
+}
+
+.forecast-list li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2.75rem 0;          /* huge breathing room between rows */
+}
+
+/* Thin-but-visible separator between rows (dimmer than the
+   section dividers so the hierarchy stays clear) */
+.forecast-list li + li {
+  border-top: 0.15rem solid #777777;
+}
+
+/* Time (e.g. "9 PM") or day (e.g. "Tuesday") */
+.row-label {
+  font-size: 3rem;
+  font-weight: bold;
+  flex: 1 1 auto;
+}
+
+/* Temperature — the number he most wants */
+.row-temp {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #FFE600;
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* In the daily list the low temp is smaller & white so the
+   high temp (yellow) clearly dominates. */
+.row-temp .low {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+/* Sky condition ("Sunny", "Light rain") */
+.row-condition {
+  font-size: 2.75rem;
+  font-weight: normal;
+  flex: 1 1 auto;
+  text-align: right;
+}
+
+/* On a narrower window, stack each row vertically instead of
+   squeezing — never let text shrink. */
+@media (max-width: 56rem) {
+  .forecast-list li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .row-temp,
+  .row-condition {
+    text-align: left;
+  }
+  .hero-temp {
+    font-size: 9rem;
+  }
+}
+
+/* ---------- Footer ---------- */
+#updated-text {
+  font-size: 1.75rem;
+  color: #CCCCCC;              /* 13.1:1 on black — still AAA */
+  text-align: center;
+  padding-top: 3rem;
+}
